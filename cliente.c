@@ -24,8 +24,7 @@
 void f_send_message(int sock);
 int strcmpst1nl (const char * s1, const char * s2);
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]){
   struct sockaddr_in adress;                                                    // ENDEREÇO DO CLIENTE -- NAO UTILIZADO?
   int sock = 0, valread;                                                        // SOCKET PARA O CLIENTE
   struct sockaddr_in serv_addr;                                                 // ENDEREÇO DO SERVIDOR
@@ -54,26 +53,22 @@ int main(int argc, char const *argv[])
   serv_addr.sin_family = AF_INET;                                               // FAMILIA IPV4
   serv_addr.sin_port = htons(PORT);                                             // PORT DO SERVIDOR     htons = host to network (se necessário inverte a ordem dos bits)
 
-  if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0)                 // CONVERTENDO O IP DE 'CHAR' PARA IPV4 -- 127.0.0.1 => Loopback adress = esta máquina
-  {                                                                             // pton = presentation to network
-    printf("\nInvalid adress / Adress not supported \n");                       // Retorna -1 em erro e 0 se o ip não está no formato certo
-    return -1;
+  if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0){                // CONVERTENDO O IP DE 'CHAR' PARA IPV4 -- 127.0.0.1 => Loopback adress = esta máquina
+    printf("\nInvalid adress / Adress not supported \n");                       // pton = presentation to network                      
+    return -1;                                                                  // Retorna -1 em erro e 0 se o ip não está no formato certo
   }
 
-  if(connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) > 0)       //CONECTANDO COM O SERVIDOR
-  {
+  if(connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) > 0){      //CONECTANDO COM O SERVIDOR
     printf("\nConnection failed \n");
     return -1;
   }
 
-  while(1)
-  {
+  while(1){
     valread = recv(sock, buffer, 1024, 0);
     printf("%s\n", buffer);                                                     //IMPRIME MENSAGEM DE CHEGADA
     f_send_message(sock);
     memset(buffer, '\0', strlen(buffer));
-    if(strcmpst1nl(buffer, "exit") == 0)
-    {
+    if(strcmpst1nl(buffer, "exit") == 0){
       exit(0);
       close(sock);
     }
@@ -85,8 +80,7 @@ int main(int argc, char const *argv[])
 void f_send_message(int sock){
   char* mensagem = (char*)malloc(LEN*sizeof(char));
   fgets(mensagem, LEN, stdin);
-  if(strcmpst1nl(mensagem, "cls") == 0)
-  {
+  if(strcmpst1nl(mensagem, "cls") == 0){
     system("clear");
     free(mensagem);
     char* mensagem = (char*)malloc(LEN*sizeof(char));
@@ -98,9 +92,9 @@ void f_send_message(int sock){
   return;
 }
 
-int strcmpst1nl (const char * s1, const char * s2)                              //FUNCAO UTILIZADA PARA COMPARAR STRINGS IGNORANDO O CARACTERE \n
-{                                                                               //Fonte: Usuario StackOverflow abligh
-  char s1c;                                                                     //https://stackoverflow.com/a/21475992
+int strcmpst1nl (const char * s1, const char * s2){                             //FUNCAO UTILIZADA PARA COMPARAR STRINGS IGNORANDO O CARACTERE \n
+  char s1c;                                                                     //Fonte: Usuario StackOverflow abligh
+                                                                                //https://stackoverflow.com/a/21475992
   do
     {
       s1c = *s1;
